@@ -1,4 +1,4 @@
-import { Component,  EventEmitter, Input, Output , AfterViewInit} from '@angular/core';
+import { Component,  ElementRef, ViewChild, EventEmitter, Input, Output , AfterViewInit} from '@angular/core';
 import { Cell, DefaultEditor, Editor } from 'ng2-smart-table'
 
 
@@ -11,11 +11,17 @@ import { Cell, DefaultEditor, Editor } from 'ng2-smart-table'
 export class SelectEntryComponent extends DefaultEditor implements AfterViewInit {
 
 
+    @ViewChild('name') name: ElementRef;
 
   value = '';
 
   ngAfterViewInit() {
-    this.listIdent = this.cell.getId();
+    //this.listIdent = 'L' + this.cell.getId();
+    if (this.cell.newValue !== '') {
+      this.name.nativeElement.value = this.cell.getValue();
+    }
+    console.log(this.cell.getColumn());
+    console.log(this.cell.getColumn().getConfig());
   }
 
   clearText() {
@@ -23,7 +29,7 @@ export class SelectEntryComponent extends DefaultEditor implements AfterViewInit
     this.reset.emit();
   }
 
-  listIdent: string;
+  listIdent="bacon";
 
   @Input()
   items: {}[] = [];

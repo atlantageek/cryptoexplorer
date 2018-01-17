@@ -25,7 +25,9 @@ export class PortfolioComponent implements OnInit {
         editor: {
           type: 'custom',
           component: SelectEntryComponent,
-          list:['a','b','ccc','dddd']
+          config:{
+          list:[{title:'a',value:'a'},{title:'d',value:'d'},{title:'b',value:'b'},{title:'c',value:'c'}]
+        }
         }
       },
       amount: {
