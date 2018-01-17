@@ -1,0 +1,5 @@
+node_modules
+coindata.db
+coinmarketcap_cache.sqlite
+package-lock.json
+
