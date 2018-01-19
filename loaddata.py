@@ -4,7 +4,7 @@ import sqlite3
 conn=sqlite3.connect('/home/tj/dev/qoinmarket/coindata.db')
 
 c=conn.cursor()
-c.execute('''CREATE TABLE IF NOT EXISTS coins (id text, name text, symbol text, rank text, price_usd float, price_btc float, volume_usd float, market_cap float, available_supply float, max_supply float, pct_chg_1h float, pct_chg_24h float, pct_chg_7d float, when_at text) ''')
+c.execute('''CREATE TABLE IF NOT EXISTS coins (id text, name text, symbol text, rank number, price_usd float, price_btc float, volume_usd float, market_cap float, available_supply float, max_supply float, pct_chg_1h float, pct_chg_24h float, pct_chg_7d float, when_at text) ''')
 c.execute('CREATE UNIQUE INDEX IF NOT EXISTS t1b on coins(id, when_at)')
 coinmarketcap = Market()
 tickerData = coinmarketcap.ticker(limit=10000)

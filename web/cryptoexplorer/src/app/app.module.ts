@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { PagesModule } from './pages/pages.module';
 
 import { AppComponent } from './app.component';
+import {AngularFontAwesomeModule} from 'angular-font-awesome';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
+    AngularFontAwesomeModule,
     AppRoutingModule,
     PagesModule
   ],

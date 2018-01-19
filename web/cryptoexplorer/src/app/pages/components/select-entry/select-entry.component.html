@@ -2,8 +2,8 @@
 
 <input  type="search" [value]="value" class="form-control short-input clearable"
 [name]="cell.getId()"  [disabled]="!cell.isEditable()" (click)="onClick.emit($event)"
-(keyup)="updateValue()" (keydown.enter)="onEdited.emit($event)" (keydown.esc)="onStopEditing.emit()"
- [attr.list]="listIdent" placeholder="Search {{label}}..." (input)="valSelected($event.target.value)" > {{listidentx}}
+ (keydown.enter)="onEdited.emit($event)" (keydown.esc)="onStopEditing.emit()"
+ [attr.list]="listIdent" placeholder="Search {{label}}..." (input)="valSelected($event.target.value)" > 
 <span class="fa fa-times-circle"  (click)="clearText()"></span>
 <datalist [id]="listIdent">
   <option *ngFor="let option of cell.getColumn().getConfig()?.list" [value]="option.value"

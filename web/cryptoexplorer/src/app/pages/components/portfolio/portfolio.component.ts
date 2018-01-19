@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SelectEntryComponent} from '../select-entry/select-entry.component';
+import {CoinService} from '../../../coin.service'
 
 @Component({
   selector: 'app-portfolio',
@@ -10,9 +11,10 @@ import { SelectEntryComponent} from '../select-entry/select-entry.component';
 export class PortfolioComponent implements OnInit {
   public portfolio = [];
   source: LocalDataSource;
-  constructor() {
+  constructor(private _coinService:CoinService) {
      this.source = new LocalDataSource(this.portfolio);
   }
+  currencyList=[];
 
   settings = {
     pager:{perPage:20},
@@ -26,8 +28,8 @@ export class PortfolioComponent implements OnInit {
           type: 'custom',
           component: SelectEntryComponent,
           config:{
-          list:[{title:'a',value:'a'},{title:'d',value:'d'},{title:'b',value:'b'},{title:'c',value:'c'}]
-        }
+            list:[{title:'a',value:'a'},{title:'d',value:'d'},{title:'b',value:'b'},{title:'c',value:'c'}]
+          }
         }
       },
       amount: {
@@ -41,6 +43,14 @@ export class PortfolioComponent implements OnInit {
     }
   };
   ngOnInit() {
+    this._coinService.getCoins().subscribe((coins)=>{
+      console.log(coins);
+      this.settings.columns.currency.editor.config.list=coins.map((coin)=>{
+        return {title:coin['name'],value:coin['name']}; });
+      this.settings = Object.assign({}, this.settings);
+
+    //console.log(data);
+    })
   }
 
   deleteEvent(event) {
