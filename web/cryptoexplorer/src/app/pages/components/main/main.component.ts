@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import {CoinService} from '../../../coin.service'
+import {PriceChangeRenderComponent} from '../price-change-render/price-change-render.component';
+import { CurrencyRenderComponent} from '../currency-render/currency-render.component';
 
 @Component({
   selector: 'app-main',
@@ -23,14 +25,20 @@ export class MainComponent implements OnInit {
       symbol: {
         title: 'Symbol'
       },
-      price: {
-        title: 'Price ($)'
+      price_usd: {
+        title: 'Price ($)',
+        type: 'custom',
+        renderComponent: CurrencyRenderComponent,
       },
       price_change: {
-        title: 'Price Change(hour/day/week)'
+        title: 'Price Change(hour/day/week)',
+        type: 'custom',
+        renderComponent: PriceChangeRenderComponent,
       },
       market_cap: {
-        title: 'MarketCap'
+        title: 'MarketCap',
+        type: 'custom',
+        renderComponent: CurrencyRenderComponent,
       }
     }
   };
@@ -44,9 +52,9 @@ export class MainComponent implements OnInit {
     this._coinService.getCoins().subscribe((coins)=>{
       console.log(coins);
       this.data=coins.map((record)=>{
-        record['price']=this.currencyFormat(record['price_usd']);
-        record['market_cap']=this.currencyFormat(record['market_cap']);
-        record['price_change'] = `${record['pct_chg_1h']}%/ ${record['pct_chg_24h']}%/ ${record['pct_chg_7d']}%`;
+        //record['price']=this.currencyFormat(record['price_usd']);
+        //record['market_cap']=this.currencyFormat(record['market_cap']);
+        record['price_change'] = `${record['pct_chg_1h']},${record['pct_chg_24h']},${record['pct_chg_7d']}`;
         return record;
     })
     //console.log(data);

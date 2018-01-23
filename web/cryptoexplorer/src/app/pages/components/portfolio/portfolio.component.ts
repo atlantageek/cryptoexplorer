@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SelectEntryComponent} from '../select-entry/select-entry.component';
+import { CurrencyRenderComponent} from '../currency-render/currency-render.component';
 import {CoinService} from '../../../coin.service'
+
 
 @Component({
   selector: 'app-portfolio',
@@ -15,8 +17,12 @@ export class PortfolioComponent implements OnInit {
      this.source = new LocalDataSource(this.portfolio);
   }
   currencyList=[];
+  price_lookup = {};
+  pct_change_lookup={};
+  networth = 0;
 
   settings = {
+    hideSubHeader: false,
     pager:{perPage:20},
     add: {confirmCreate: true},
     delete: {confirmDelete: true},
@@ -24,21 +30,35 @@ export class PortfolioComponent implements OnInit {
     columns: {
       currency: {
         title: 'Currency',
+        filter: false,
+
         editor: {
           type: 'custom',
           component: SelectEntryComponent,
           config:{
-            list:[{title:'a',value:'a'},{title:'d',value:'d'},{title:'b',value:'b'},{title:'c',value:'c'}]
+            list:[]
           }
         }
       },
       amount: {
+        filter: false,
         title: 'Amount'
       },
       value: {
+        filter: false,
         title: 'Value',
-        editable: false
+        editable: false,
+        addable: false,
+        type: 'custom',
+        renderComponent: CurrencyRenderComponent,
       },
+      change: {
+        filter: false,
+        title: "Day's Change",
+        editable: false,
+        type: 'custom',
+        renderComponent: CurrencyRenderComponent,
+      }
 
     }
   };
@@ -46,35 +66,76 @@ export class PortfolioComponent implements OnInit {
     this._coinService.getCoins().subscribe((coins)=>{
       console.log(coins);
       this.settings.columns.currency.editor.config.list=coins.map((coin)=>{
-        return {title:coin['name'],value:coin['name']}; });
-      this.settings = Object.assign({}, this.settings);
+        return {title:coin['name'],value:coin['name']};
+      });
+      for (let i=0; i<coins.length;i++) {
+        this.price_lookup[coins[i]['name']] = coins[i]['price_usd'];
+        this.pct_change_lookup[coins[i]['name']] = coins[i]['pct_chg_24h'];
+      }
 
-    //console.log(data);
+      this.settings = Object.assign({}, this.settings);
+      this.load();
     })
+
   }
+
 
   deleteEvent(event) {
 
     console.log("delete");
     event.confirm.resolve();
+
   }
   editEvent(event) {
     console.log("edit");
+    console.log(event.newData);
+    event.newData= this.doCalcs(event.newData);
+    event.confirm.resolve(event.newData);
+    this.storeLater();
 
-    event.confirm.resolve();
+    //this.store();
+
+
   }
   createEvent(event) {
     console.log(this.source);
     console.log("Save");
+    event.newData= this.doCalcs(event.newData);
+    event.confirm.resolve(event.newData);
+    this.storeLater();
+    //this.store();
 
-    event.confirm.resolve();
+  }
+
+  doCalcs(data) {
+    let price = this.price_lookup[ data['currency']];
+    data['value'] = parseFloat(data['amount']) * price;
+
+    let pct = this.pct_change_lookup[ data['currency']];
+    data['change'] = parseFloat(data['value']) * pct/100.0;
+    return data;
+  }
+  storeLater() {
+    setTimeout(() => {this.store();}, 1000)
   }
   store() {
-    console.log("Save");
+
     this.source.getAll().then((data) => {
+      console.log("SaveII");
       console.log(data);
       localStorage.setItem('portfolio', JSON.stringify(data));
-    })
+    });
+  }
+  load() {
+
+    let data = JSON.parse(localStorage.getItem('portfolio'));
+    this.networth = 0;
+    for (var i=0;i<data.length;i++) {
+      data[i]=this.doCalcs(data[i]);
+      this.networth += data[i]['value'];
+    }
+
+    this.source.load(data);
 
   }
 

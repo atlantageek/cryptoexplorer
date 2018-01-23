@@ -9,11 +9,28 @@ import { Cell, DefaultEditor, Editor } from 'ng2-smart-table'
 })
 
 export class SelectEntryComponent extends DefaultEditor implements AfterViewInit {
+  value='';
+
+  @ViewChild('name') name: ElementRef;
+  @Input() cell: Cell;
+  @Input() inputClass: string = '';
+      @Input()
+      items: {}[] = [];
+
+      @Input()
+      labelAttr = ''
+
+      @Input()
+      label = '';
 
 
-    @ViewChild('name') name: ElementRef;
 
-  value = '';
+      @Output()
+      entry: EventEmitter<{}> = new EventEmitter();
+
+      @Output()
+      reset: EventEmitter<{}> = new EventEmitter();
+  @Output() edited = new EventEmitter<any>();
 
   ngAfterViewInit() {
     //this.listIdent = 'L' + this.cell.getId();
@@ -24,33 +41,29 @@ export class SelectEntryComponent extends DefaultEditor implements AfterViewInit
     console.log(this.cell.getColumn().getConfig());
   }
 
-  clearText() {
-    this.value = '';
-    this.reset.emit();
+  updateValue() {
+    const name = this.name.nativeElement.value;
+    console.log("Updating Value");
+    console.log(name);
+    this.cell.newValue = `${name}`;
   }
 
-  listIdent="bacon";
+    clearText() {
+      //this.value = '';
+      console.log("CLEAR TEXS");
+      this.value='';
+      this.name.nativeElement.value = '';
+      this.cell.newValue = '';
+    }
 
-  @Input()
-  items: {}[] = [];
-
-  @Input()
-  labelAttr = ''
-
-  @Input()
-  label = '';
-
+    listIdent="bacon";
 
 
-  @Output()
-  entry: EventEmitter<{}> = new EventEmitter();
 
-  @Output()
-  reset: EventEmitter<{}> = new EventEmitter();
+    valSelected(value) {
+      this.cell.newValue = value;
+      //this.value = value;
+    }
 
-  valSelected(value) {
-    this.entry.emit(value);
-    this.value = value;
 
   }
-}

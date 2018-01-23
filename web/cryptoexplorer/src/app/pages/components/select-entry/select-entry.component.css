@@ -9,8 +9,8 @@
 .clearable .fa-times-circle {
     color: red;
     position: absolute;
-    top: 2px;
-    right: 23px;
+    top: 5px;
+    right: 30px;
     font-size: 15px;
     display:none;
     cursor: pointer;
