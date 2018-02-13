@@ -6,6 +6,7 @@ cors = require('cors')
 
 
 var restapi = express()
+restapi.use(express.static('public'));
 
 ;
 var originsWhitelist = [

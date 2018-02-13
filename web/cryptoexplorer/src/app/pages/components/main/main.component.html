@@ -1,3 +1,3 @@
 
-<h2>Market</h2>
- <ng2-smart-table [settings]="settings" [source]="data"></ng2-smart-table>
+<h2>Market</h2> <input #search class="search" type="text" placeholder="Search..." (keydown.enter)="onSearch(search.value)"><button (click)="onSearch(search.value)">Search</button><button (click)="onReset()">Reset</button>
+ <ng2-smart-table [settings]="settings" [source]="source" (custom)="select($event)"></ng2-smart-table>

@@ -12,13 +12,13 @@ export class PriceChangeRenderComponent implements ViewCell, OnInit {
 
   renderValue: number;
 
-  data: string[];
+  data: number[];
 
   @Input() value:  string;
   @Input() rowData: any;
 
   ngOnInit() {
-    this.data = this.value.split(',');
+  this.data = this.value.split(',').map(val=>Number(val));
   }
 
 }

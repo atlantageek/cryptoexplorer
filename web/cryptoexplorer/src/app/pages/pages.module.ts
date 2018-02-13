@@ -10,7 +10,7 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { SelectEntryComponent } from './components/select-entry/select-entry.component';
 import { CurrencyRenderComponent } from './components/currency-render/currency-render.component';
 import { PriceChangeRenderComponent } from './components/price-change-render/price-change-render.component';
-
+import { WatchMeRenderComponent } from './components/watch-me/watch-me-render.component';
 
 @NgModule({
   imports: [
@@ -19,9 +19,9 @@ import { PriceChangeRenderComponent } from './components/price-change-render/pri
     PagesRoutingModule,
     Ng2SmartTableModule
   ],
-  declarations: [PagesComponent, MainComponent, PortfolioComponent, SelectEntryComponent, CurrencyRenderComponent, PriceChangeRenderComponent],
+  declarations: [PagesComponent, MainComponent, PortfolioComponent, SelectEntryComponent, CurrencyRenderComponent, PriceChangeRenderComponent, WatchMeRenderComponent],
   providers: [CoinService],
   exports:[PagesComponent],
-  entryComponents:[SelectEntryComponent, CurrencyRenderComponent, PriceChangeRenderComponent]
+  entryComponents:[SelectEntryComponent, CurrencyRenderComponent, PriceChangeRenderComponent, WatchMeRenderComponent]
 })
 export class PagesModule { }
